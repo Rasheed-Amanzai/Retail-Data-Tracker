@@ -1,0 +1,47 @@
+@model IEnumerable<Retail_Data_Tracker.Models.Order>
+
+@{
+
+    Layout = null;
+
+}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width" />
+        <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.css" />
+        <title>Orders</title>
+    </head>
+    <body>
+        <div class="panel-body">
+            <h2>Orders</h2>
+            @* click on order number to view order details *@
+            <table class="table table-sm table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>Order No.</th>
+                        @* todo: make this clickable ^ *@
+                        <th>Order Date</th>
+                        <th>Client</th>
+                        <th>Tracking Number</th>
+                        <th>Ship Date</th>
+                        <th>Arrival Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (Retail_Data_Tracker.Models.Order o in Model) {
+                    <tr>
+                        <td>@o.ShippingDetails.OrderNumber</td>
+                        <td>@o.ShippingDetails.OrderDate</td>
+                        <td>@o.client.name</td>
+                        <td>@o.ShippingDetails.TrackingNumber</td>
+                        <td>@o.ShippingDetails.ShippingDate</td>
+                        <td>@o.ShippingDetails.ArrivalDate</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>
