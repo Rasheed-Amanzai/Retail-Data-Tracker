@@ -20,6 +20,7 @@
                 <thead>
                     <tr>
                         <th>Item</th>
+                        <th>Item Description</th>
                         <th>Quantity</th>
                         <th>Buy Cost</th>
                         <th>Sell Cost</th>
@@ -31,6 +32,7 @@
                     @foreach (Retail_Data_Tracker.Models.Item i in Model) {
                     <tr>
                         <td>@i.Name</td>
+                        <td>@i.ItemDesc</td>
                         <td>@i.Quantity</td>
                         <td>@i.BuyCost</td>
                         <td>@i.Supplier</td>
