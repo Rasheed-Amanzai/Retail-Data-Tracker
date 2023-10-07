@@ -1,32 +1,21 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Retail_Data_Tracker.Models;
+﻿using Retail_Data_Tracker.Models;
+using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
 namespace Retail_Data_Tracker.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
-
-        public IActionResult Index()
+        public ViewResult Index()
         {
             return View();
         }
 
-        public IActionResult Privacy()
+        public ActionResult OrderForm(Order order)
         {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+            // TODO: Handle Order form submission when user wants to create a new invoice/order,
+            // and if successful, redirect the user to a confirmation page (or a different page)
+            return View(order);
+        } 
     }
 }
