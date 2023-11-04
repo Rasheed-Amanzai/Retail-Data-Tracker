@@ -19,6 +19,13 @@ namespace Retail_Data_Tracker.Models
         public static void AddSupplier(Supplier supplier)
         {
             _supplierList.Add(supplier);
+            // TODO: Add the new supplier to the database
+        }
+
+        public static void RemoveSupplier(Supplier supplier)
+        {
+            _supplierList.Remove(supplier);
+            // TODO: Remove the supplier entry from the database
         }
     }
 }
