@@ -36,7 +36,7 @@
                         <td>@i.Supplier</td>
                         <td>@i.SellCost</td>
                         <td>
-                            <input type="checkbox">
+                            @Html.CheckBoxFor(m => i.IsChecked)
                             <input type="number" min="0" max={@i.Quantity}/>
                         </td>
                     </tr>

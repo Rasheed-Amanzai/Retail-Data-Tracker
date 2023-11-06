@@ -14,5 +14,7 @@ namespace Retail_Data_Tracker.Models
 
         public double BuyCost { get; set;}
         public double SellCost {get; set;}
+        public bool IsChecked { get; set; }
+
     }
 }

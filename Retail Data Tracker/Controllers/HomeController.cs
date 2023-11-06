@@ -17,5 +17,14 @@ namespace Retail_Data_Tracker.Controllers
             // and if successful, redirect the user to a confirmation page (or a different page)
             return View(order);
         } 
+
+        [HttpPost]
+        public ActionResult Inventory(string CreateInvoice, Order order){
+            foreach(var item in Models.ItemRepository){
+                if (item.IsChecked){
+                    order.Items.Add(item);
+                }
+            }
+        }
     }
 }
