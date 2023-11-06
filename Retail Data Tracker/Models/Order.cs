@@ -10,5 +10,6 @@ namespace Retail_Data_Tracker.Models
         public List<Item> Items {get; set;}
         public List<int> Quantity {get; set;}
         public Shipping ShippingDetails {get; set;}
+        public Client OrderClient {get; set;}
     }
 }
