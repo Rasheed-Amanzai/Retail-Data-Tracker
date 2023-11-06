@@ -12,6 +12,6 @@ namespace Retail_Data_Tracker.Models
         public string OrderDate {get; set;}
         public string ShippingDate {get; set;}
         public string ArrivalDate {get; set;}
-        public Client client {get; set;}
+        public Client ClientName {get; set;}
     }
 }
