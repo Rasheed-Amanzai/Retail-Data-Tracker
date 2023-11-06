@@ -11,7 +11,7 @@ namespace Retail_Data_Tracker.Models
         public string Name { get; set; }
         public string Address { get; set; }
         public string Description { get; set; }
-        public List<Item> ClientInventory { get; set; }
+        public List<Item> ClientOrder { get; set; }
         
     }
 }

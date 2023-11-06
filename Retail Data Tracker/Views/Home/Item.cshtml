@@ -1,2 +1,57 @@
-@* to do: create html page to display item, its quantity, etc
-to link back to Inventory page (inventory page should just display the list of items?)*@
+@model IEnumerable<Retail_Data_Tracker.Models.Item>
+
+@{
+
+    Layout = null;
+
+}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width" />
+        <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.css" />
+        <title>Inventory</title>
+    </head>
+    <body>
+        <div class="panel-body">
+            <h2>Current Inventory</h2>
+            <table class="table table-sm table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Item Description</th>
+                        <th>Quantity</th>
+                        <th>Buy Cost</th>
+                        <th>Sell Cost</th>
+                        <th>Supplier</th>
+                        <th>Add to invoice</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (Retail_Data_Tracker.Models.Item i in Model) {
+                    <tr>
+                        <td>@i.Name</td>
+                        <td>@i.ItemDesc</td>
+                        <td>@i.Quantity</td>
+                        <td>@i.BuyCost</td>
+                        <td>@i.Supplier</td>
+                        <td>@i.SellCost</td>
+                        <td>
+                            <input type="checkbox">
+                            <input type="number" min="0" max={@i.Quantity}/>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary" name="CreateInvoice">Create invoice</button>
+                <button type="submit" class="btn btn-danger" name="OrderFromSupplier">Order from supplier</button>
+            </div>
+            @* todo: create controller class to direct these buttons properly *@
+            @* todo: create Item class with name, quantity, supplier, buy cost, sell cost, anything else *@
+            @* todo: create invoice creation form for clients that CreateInvoice button leads to*@
+        </div>
+    </body>
+</html>

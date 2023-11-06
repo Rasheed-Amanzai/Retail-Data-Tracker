@@ -14,5 +14,15 @@ namespace Retail_Data_Tracker.Models
                 return _clientList;
             }
         }
+
+        public static void AddClient(Client client){
+            _clientList.Add(client);
+            // TO-DO: Add to database
+        }
+
+        public static void RemoveClient(Client client){
+            _clientList.Remove(client);
+            // TO-DO: Remove from database
+        }
     }
 }
