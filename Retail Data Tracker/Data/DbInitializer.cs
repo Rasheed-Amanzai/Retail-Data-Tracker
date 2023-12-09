@@ -16,20 +16,7 @@ namespace Retail_Data_Tracker.Data
                 return; // Database has already been seeded
             }
 
-            // TODO: Populate the database
-            var suppliers = new Supplier[]
-            {
-                new Supplier() {Id = 1, Name = "Bob's Wheat Farm", Address = "123 Farmer Rd", Description = "A small farm that grows wheat and other grain products.", SupplierInventory = new List<Item>() } // Missing Inventory
-            };
-
-            foreach (var s in suppliers)
-            {
-                context.Suppliers.Add(s);
-            }
-            context.SaveChanges();
-
-            // Continue with other entity/models (Item, Order, etc.)
-
+            // Item entities
             var items = new Item[]
             {
                 new Item() {Id = 1, Name = "Wheat Grain", ItemDesc = "Raw wheat grain", BuyCost = 0.10, SellCost = 1.00, Quantity = 100, SupplierId = 1},
@@ -47,6 +34,25 @@ namespace Retail_Data_Tracker.Data
                 context.Items.Add(i);
             }
             context.SaveChanges();
+
+            // Supplier entities
+            var suppliers = new Supplier[]
+            {
+                new Supplier() {Id = 1, Name = "Winston's Wild Wheats", Address = "123 Farmer Road", 
+                    Description = "A small farm that grows wheat and other grain products.", SupplierInventory = new List<Item>(items) },
+                new Supplier() {Id = 2, Name = "Frank's Fruits", Address = "456 Plantation Drive",
+                    Description = "A large farm that produces a wide variety of fruit products.", SupplierInventory = new List<Item>(items) }, // TODO: Add fruit items to inventory
+                new Supplier() {Id = 3, Name = "Vennessa's Veggies", Address = "789 Vine Avenue",
+                    Description = "A small farm that grows fresh vegetables.", SupplierInventory = new List<Item>(items) } // TODO: Add vegetable items to inventory
+            };
+
+            foreach (var s in suppliers)
+            {
+                context.Suppliers.Add(s);
+            }
+            context.SaveChanges();
+
+            // Continue with other entities (Order, Client, etc.)
         }
     }
 }
