@@ -32,12 +32,12 @@
                 <tbody>
                     @foreach (Retail_Data_Tracker.Models.Order o in Model) {
                     <tr>
-                        <td>@o.ShippingDetails.OrderNumber</td>
-                        <td>@o.ShippingDetails.OrderDate</td>
+                        <td>@o.Id</td>
+                        <td>@o.OrderDate</td>
                         <td>@o.OrderClient.Name</td>
-                        <td>@o.ShippingDetails.TrackingNumber</td>
-                        <td>@o.ShippingDetails.ShippingDate</td>
-                        <td>@o.ShippingDetails.ArrivalDate</td>
+                        <td>@o.TrackingNumber</td>
+                        <td>@o.ShippingDate</td>
+                        <td>@o.ArrivalDate</td>
                     </tr>
                 }
                 </tbody>

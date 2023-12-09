@@ -33,7 +33,7 @@
                         <td>@i.Name</td>
                         <td>@i.Quantity</td>
                         <td>@i.BuyCost</td>
-                        <td>@i.Supplier</td>
+                        <td>@i.GetSupplier().Name</td>
                         <td>@i.SellCost</td>
                         <td>
                             @Html.CheckBoxFor(m => i.IsChecked)
