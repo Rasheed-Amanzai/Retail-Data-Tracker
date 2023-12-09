@@ -1,12 +1,14 @@
 ﻿using Retail_Data_Tracker.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using Retail_Data_Tracker.Data;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Retail_Data_Tracker.Controllers
 {
     public class HomeController : Controller
     {
-        public ViewResult Index()
+        public ActionResult Index()
         {
             return View();
         }
@@ -19,11 +21,20 @@ namespace Retail_Data_Tracker.Controllers
         } 
 
         [HttpPost]
-        public ActionResult Inventory(string CreateInvoice, Order order){
-            foreach(var item in Models.ItemRepository){
+        public ActionResult Inventory(string CreateInvoice, Order order, Retail_Data_TrackerContext retailContext)
+        {
+            foreach(var item in retailContext.Items){
                 if (item.IsChecked){
                     order.Items.Add(item);
-                }
+                } 
+            }
+            if (order.Items.IsNullOrEmpty())
+            {
+                return RedirectToAction("OrderForm", order);
+            }
+            else
+            {
+                return RedirectToAction("OrderForm", order);
             }
         }
     }
