@@ -1,9 +1,22 @@
+using Microsoft.EntityFrameworkCore;
+using Retail_Data_Tracker.Data;
+using System.Data;
+using Microsoft.Extensions.DependencyInjection;
+
+
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext<Retail_Data_TrackerContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("Retail_Data_TrackerContext") ?? throw new InvalidOperationException("Connection string 'Retail_Data_TrackerContext' not found.")));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddDbContext<Retail_Data_TrackerContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("RetailContext")));
+
 var app = builder.Build();
+
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -12,6 +25,7 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

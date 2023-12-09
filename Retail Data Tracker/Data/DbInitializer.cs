@@ -6,7 +6,7 @@ namespace Retail_Data_Tracker.Data
 {
     public static class DbInitializer
     {
-        public static void Initialize(RetailContext context)
+        public static void Initialize(Retail_Data_TrackerContext context)
         {
             context.Database.EnsureCreated();
 
@@ -19,7 +19,7 @@ namespace Retail_Data_Tracker.Data
             // TODO: Populate the database
             var suppliers = new Supplier[]
             {
-                new Supplier() {Id = 1, Name = "Bob's Wheat Farm", Address = "123 Farmer Rd", Description = "A small farm that grows wheat and other grain products."} // Missing Inventory
+                new Supplier() {Id = 1, Name = "Bob's Wheat Farm", Address = "123 Farmer Rd", Description = "A small farm that grows wheat and other grain products.", SupplierInventory = new List<Item>() } // Missing Inventory
             };
 
             foreach (var s in suppliers)
@@ -29,6 +29,24 @@ namespace Retail_Data_Tracker.Data
             context.SaveChanges();
 
             // Continue with other entity/models (Item, Order, etc.)
+
+            var items = new Item[]
+            {
+                new Item() {Id = 1, Name = "Wheat Grain", ItemDesc = "Raw wheat grain", BuyCost = 0.10, SellCost = 1.00, Quantity = 100, SupplierId = 1},
+                new Item() {Id = 2, Name = "1kg All-Purpose Flour", ItemDesc = "Flour good for any of your baking needs", BuyCost = 0.25, SellCost = 2.00, Quantity = 100, SupplierId = 1},
+                new Item() {Id = 3, Name = "Whole Wheat Bread Loaf", ItemDesc = "Unsliced", BuyCost = 0.75, SellCost = 3.00, Quantity = 100, SupplierId = 1},
+                new Item() {Id = 4, Name = "White Bread Loaf", ItemDesc = "Unsliced", BuyCost = 0.75, SellCost = 3.00, Quantity = 100, SupplierId = 1},
+                new Item() {Id = 5, Name = "Sliced Whole Wheat Bread Loaf", ItemDesc = "Sliced", BuyCost = 0.75, SellCost = 3.00, Quantity = 100, SupplierId = 1},
+                new Item() {Id = 6, Name = "Sliced White Bread Loaf", ItemDesc = "Sliced", BuyCost = 0.75, SellCost = 3.00, Quantity = 100, SupplierId = 1},
+                new Item() {Id = 7, Name = "1kg Whole Wheat Flour", ItemDesc = "Flour good for any of your baking needs", BuyCost = 0.25, SellCost = 2.00, Quantity = 100, SupplierId = 1},
+                new Item() {Id = 8, Name = "500g Ranch Croutons", ItemDesc = "Croutons with a ranch flavor", BuyCost = 1.00, SellCost = 5.00, Quantity = 100, SupplierId = 1},
+            };
+
+            foreach (var i in items)
+            {
+                context.Items.Add(i);
+            }
+            context.SaveChanges();
         }
     }
 }
