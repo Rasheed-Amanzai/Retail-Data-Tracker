@@ -17,6 +17,7 @@ namespace Retail_Data_Tracker.Data
         public DbSet<Retail_Data_Tracker.Models.Item> Items { get; set; } = default!;
         public DbSet<Retail_Data_Tracker.Models.Supplier> Suppliers { get; set; } = default!;
         public DbSet<Retail_Data_Tracker.Models.Order> Orders { get; set; } = default!;
+        public DbSet<Retail_Data_Tracker.Models.Client> Client { get; set; } = default!;
 
     }
 }
