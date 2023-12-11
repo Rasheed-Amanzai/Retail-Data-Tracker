@@ -91,7 +91,7 @@ public static class SeedData
                 new Order()
                 {
                     Items = new List<Item> { context.Items.Where(i => i.Id == 1).FirstOrDefault() },
-                    Quantity = new List<int>(),
+                    Quantity = new List<Quantity>(),
                     TrackingNumber = "ABC123456789",
                     OrderDate = "May 20th, 2023",
                     ShippingDate = "May 22nd, 2023",
@@ -101,7 +101,7 @@ public static class SeedData
                 new Order()
                 {
                     Items = new List<Item> { context.Items.Find(1), context.Items.Find(3) },
-                    Quantity = new List<int>(),
+                    Quantity = new List<Quantity>(),
                     TrackingNumber = "XYZ987654321",
                     OrderDate = "October 12th, 2023",
                     ShippingDate = "October 13th, 2023",
@@ -112,7 +112,7 @@ public static class SeedData
                 new Order()
                 {
                     Items = new List<Item> { context.Items.Find(4), context.Items.Find(2) },
-                    Quantity = new List<int>(),
+                    Quantity = new List<Quantity>(),
                     TrackingNumber = "QWE789456123",
                     OrderDate = "April 3rd, 2023",
                     ShippingDate = "April 5th, 2023",
