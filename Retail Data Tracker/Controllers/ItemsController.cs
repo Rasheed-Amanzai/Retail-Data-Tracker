@@ -4,7 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Retail_Data_Tracker.Data;
 using Retail_Data_Tracker.Models;
 
@@ -20,12 +22,33 @@ namespace Retail_Data_Tracker.Controllers
         }
 
         // GET: Items
-        public async Task<IActionResult> Index()
+        public ActionResult Index()
         {
-            var retail_Data_TrackerContext = _context.Items.Include(i => i.ItemSupplier);
-            return View(await retail_Data_TrackerContext.ToListAsync());
+            var items = _context.Items.Include(i => i.ItemSupplier);
+            return View(items.ToList());
         }
 
+        [HttpPost]
+        public ActionResult Index(List<Item> items, string submitButton)
+        {
+            foreach (var item in items)
+            {
+                Console.WriteLine($"{item.Name} - IsChecked: {item.IsChecked}");
+            }
+            if (submitButton == "invoiceSubmit") {
+                Console.WriteLine(submitButton);
+                ViewBag.Message = "Invoice Created";
+                var checkedItems = items.Where(x => x.IsChecked).ToList();
+
+                foreach (var item in checkedItems)
+                {
+                    Console.WriteLine(item.Name);
+                    ViewBag.Message += string.Format(" {0}", item.Name);
+                }
+            }
+
+            return View(items);
+        }
         // GET: Items/Details/5
         public async Task<IActionResult> Details(int? id)
         {

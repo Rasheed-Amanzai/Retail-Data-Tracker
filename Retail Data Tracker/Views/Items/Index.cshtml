@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Retail_Data_Tracker.Models.Item>
+﻿@model List<Retail_Data_Tracker.Models.Item>
 
 @{
     ViewData["Title"] = "Index";
@@ -9,67 +9,86 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+@using (Html.BeginForm("Index", "Items", FormMethod.Post))
+{
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                Name
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ItemDesc)
+                ItemDesc
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Quantity)
+                Quantity
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.BuyCost)
+                BuyCost
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.SellCost)
+                SellCost
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ItemSupplier)
+                ItemSupplier
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@for (int i = 0; i < Model.Count; i++) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Name)
+                @Html.DisplayFor(m => m[i].Name)
+                @Html.HiddenFor(m => m[i].Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ItemDesc)
+                        @Html.DisplayFor(m => m[i].ItemDesc)
+                        @Html.HiddenFor(m => m[i].ItemDesc)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Quantity)
+                        @Html.DisplayFor(m => m[i].Quantity)
+                        @Html.HiddenFor(m => m[i].Quantity)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.BuyCost)
+                        @Html.DisplayFor(m => m[i].BuyCost)
+                        @Html.HiddenFor(m => m[i].BuyCost)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.SellCost)
+                        @Html.DisplayFor(m => m[i].SellCost)
+                        @Html.HiddenFor(m => m[i].SellCost)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ItemSupplier.Name)
+                        @Html.DisplayFor(m => m[i].ItemSupplier.Name)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-action="Edit" asp-route-id="@Model[i].Id">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@Model[i].Id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@Model[i].Id">Delete</a>
             </td>
                 <td>
-                    <input type="checkbox">
+                        @Html.CheckBoxFor(m => m[i].IsChecked)
+                        @Html.HiddenFor(m => m[i].Id)
                 </td>
                 <td>
-                    <input type="number" min="0" max={@item.Quantity} />
+                        @Html.TextBox("Quantity", 1, new { type = "number", min = 1, max = Model[i].Quantity, name = $"Model[{i}].Quantity" })
                 </td>
         </tr>
 }
     </tbody>
 </table>
+<br />
+    <button class="btn btn-primary" name="submitButton" value="invoiceSubmit">Create invoice</button>
+    <button type="submit" class="btn btn-danger" name="submitButton" value="orderFromSupplier">Order from supplier</button>
+}
+@if (ViewBag.Message != null)
+{
+    <script type="text/javascript">
+        window.onload = function () {
+            alert("@ViewBag.Message");
+        };
+    </script>
+}
 <div class="form-group">
-    <button type="submit" class="btn btn-primary" name="CreateInvoice">Create invoice</button>
-    <button type="submit" class="btn btn-danger" name="OrderFromSupplier">Order from supplier</button>
+
 </div>
