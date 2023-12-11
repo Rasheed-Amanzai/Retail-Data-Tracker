@@ -35,6 +35,44 @@ namespace Retail_Data_Tracker.Data
             }
             context.SaveChanges();
 
+            // Order Entities
+            var orders = new Order[] {
+                new Order() { Id = 1, Items = new List<Item>(items), Quantity = new List<int>,
+                    TrackingNumber = "ABC123456789", OrderDate = "May 20th, 2023", ShippingDate = "May 22nd, 2023"
+                    ArrivalDate = "May 25th, 2023", OrderClient = new Client()},
+                new Order() { Id = 2, Items = new List<Item>(items), Quantity = new List<int>,
+                    TrackingNumber = "XYZ987654321", OrderDate = "October 12th, 2023", ShippingDate = "October 13th, 2023"
+                    ArrivalDate = "October 15th, 2023", OrderClient = new Client() }, 
+                new Order() { Id = 3, Items = new List<Item>(items), Quantity = new List<int>,
+                    TrackingNumber = "QWE789456123", OrderDate = "April 3rd, 2023", ShippingDate = "April 5th, 2023"
+                    ArrivalDate = "April 7th, 2023", OrderClient = new Client() }
+            };
+
+            foreach (var o in orders) 
+            {  
+                context.Orders.Add(o); 
+            }
+            context.SaveChanges();
+
+            // Client Entities
+            var clients = new Client[]{ 
+                new Client() { Id = 1, Name = "Food Basics", Address = "4652 Grocery Street",
+                    Description = "Food Basics is a grocery store chain that provides a wide selection of essential food items and household products at affordable prices.",
+                    ClientOrder = new List<Order>(orders)},
+                new Client() { Id = 2, Name = "Loblaws", Address = "372 Competing Drive",
+                    Description = "Loblaws is a Canadian supermarket chain offering a diverse range of groceries, fresh produce, household goods, and services in a modern retail environment.",
+                    ClientOrder = new List<Order>(orders)},
+                new Client() { Id = 3, Name = "Sobeys", Address = "3842 Alsogrocery Avenue",
+                    Description = "Sobeys is a Canadian grocery chain known for its quality fresh produce, groceries, and household items.",
+                    ClientOrder = new List<Order>(orders)}
+            };
+
+            foreach (var c in clients) 
+            {
+                context.Client.Add(c);
+            }
+            context.SaveChanges();
+
             // Supplier entities
             var suppliers = new Supplier[]
             {
@@ -51,6 +89,8 @@ namespace Retail_Data_Tracker.Data
                 context.Suppliers.Add(s);
             }
             context.SaveChanges();
+
+
 
             // Continue with other entities (Order, Client, etc.)
         }
