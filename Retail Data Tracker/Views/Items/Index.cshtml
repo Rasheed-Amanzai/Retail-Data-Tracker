@@ -28,9 +28,6 @@
                 @Html.DisplayNameFor(model => model.SellCost)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.IsChecked)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.ItemSupplier)
             </th>
             <th></th>
@@ -55,10 +52,7 @@
                 @Html.DisplayFor(modelItem => item.SellCost)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.IsChecked)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ItemSupplier.Id)
+                @Html.DisplayFor(modelItem => item.ItemSupplier.Name)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
@@ -67,6 +61,8 @@
             </td>
                 <td>
                     <input type="checkbox">
+                </td>
+                <td>
                     <input type="number" min="0" max={@item.Quantity} />
                 </td>
         </tr>
