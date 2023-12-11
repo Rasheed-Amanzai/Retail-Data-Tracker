@@ -22,6 +22,7 @@ namespace Retail_Data_Tracker.Controllers
         }
 
         // GET: Items
+        [HttpGet]
         public ActionResult Index()
         {
             var items = _context.Items.Include(i => i.ItemSupplier);
@@ -29,7 +30,8 @@ namespace Retail_Data_Tracker.Controllers
         }
 
         [HttpPost]
-        public ActionResult Index(List<Item> items, string submitButton)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Index(List<Item> items, string submitButton)
         {
             foreach (var item in items)
             {
@@ -42,12 +44,18 @@ namespace Retail_Data_Tracker.Controllers
 
                 foreach (var item in checkedItems)
                 {
+                    var itemx = await _context.Items.FindAsync(item.Id);
                     Console.WriteLine(item.Name);
                     ViewBag.Message += string.Format(" {0}", item.Name);
+                    item.Quantity -= 1;
+                    itemx.Quantity -= 1;
+                    _context.Update(itemx);
+                    await _context.SaveChangesAsync();
                 }
             }
 
-            return View(items);
+            var itemsList = _context.Items.Include(i => i.ItemSupplier);
+            return View(itemsList.ToList());
         }
         // GET: Items/Details/5
         public async Task<IActionResult> Details(int? id)
