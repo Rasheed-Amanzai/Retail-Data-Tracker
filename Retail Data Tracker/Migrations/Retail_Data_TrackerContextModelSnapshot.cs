@@ -58,9 +58,6 @@ namespace Retail_Data_Tracker.Migrations
                     b.Property<double>("BuyCost")
                         .HasColumnType("float");
 
-                    b.Property<int?>("ClientId")
-                        .HasColumnType("int");
-
                     b.Property<bool>("IsChecked")
                         .HasColumnType("bit");
 
@@ -86,8 +83,6 @@ namespace Retail_Data_Tracker.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClientId");
-
                     b.HasIndex("OrderId");
 
                     b.HasIndex("SupplierId");
@@ -103,39 +98,16 @@ namespace Retail_Data_Tracker.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("OrderClientId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ShippingDetailsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OrderClientId");
-
-                    b.HasIndex("ShippingDetailsId");
-
-                    b.ToTable("Orders");
-                });
-
-            modelBuilder.Entity("Retail_Data_Tracker.Models.Shipping", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
                     b.Property<string>("ArrivalDate")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("OrderClientId")
+                        .HasColumnType("int");
+
                     b.Property<string>("OrderDate")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("OrderNumber")
-                        .HasColumnType("int");
 
                     b.Property<string>("ShippingDate")
                         .IsRequired()
@@ -145,14 +117,11 @@ namespace Retail_Data_Tracker.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("clientId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("clientId");
+                    b.HasIndex("OrderClientId");
 
-                    b.ToTable("Shipping");
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("Retail_Data_Tracker.Models.Supplier", b =>
@@ -182,10 +151,6 @@ namespace Retail_Data_Tracker.Migrations
 
             modelBuilder.Entity("Retail_Data_Tracker.Models.Item", b =>
                 {
-                    b.HasOne("Retail_Data_Tracker.Models.Client", null)
-                        .WithMany("ClientOrder")
-                        .HasForeignKey("ClientId");
-
                     b.HasOne("Retail_Data_Tracker.Models.Order", null)
                         .WithMany("Items")
                         .HasForeignKey("OrderId");
@@ -202,31 +167,12 @@ namespace Retail_Data_Tracker.Migrations
             modelBuilder.Entity("Retail_Data_Tracker.Models.Order", b =>
                 {
                     b.HasOne("Retail_Data_Tracker.Models.Client", "OrderClient")
-                        .WithMany()
+                        .WithMany("ClientOrder")
                         .HasForeignKey("OrderClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Retail_Data_Tracker.Models.Shipping", "ShippingDetails")
-                        .WithMany()
-                        .HasForeignKey("ShippingDetailsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("OrderClient");
-
-                    b.Navigation("ShippingDetails");
-                });
-
-            modelBuilder.Entity("Retail_Data_Tracker.Models.Shipping", b =>
-                {
-                    b.HasOne("Retail_Data_Tracker.Models.Client", "client")
-                        .WithMany()
-                        .HasForeignKey("clientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("client");
                 });
 
             modelBuilder.Entity("Retail_Data_Tracker.Models.Client", b =>

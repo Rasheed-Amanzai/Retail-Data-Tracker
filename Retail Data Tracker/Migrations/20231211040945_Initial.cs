@@ -5,7 +5,7 @@
 namespace Retail_Data_Tracker.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -41,36 +41,15 @@ namespace Retail_Data_Tracker.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Shipping",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    OrderNumber = table.Column<int>(type: "int", nullable: false),
-                    TrackingNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    OrderDate = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ShippingDate = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ArrivalDate = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    clientId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Shipping", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Shipping_Client_clientId",
-                        column: x => x.clientId,
-                        principalTable: "Client",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Orders",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ShippingDetailsId = table.Column<int>(type: "int", nullable: false),
+                    TrackingNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OrderDate = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ShippingDate = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ArrivalDate = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     OrderClientId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -97,17 +76,11 @@ namespace Retail_Data_Tracker.Migrations
                     BuyCost = table.Column<double>(type: "float", nullable: false),
                     SellCost = table.Column<double>(type: "float", nullable: false),
                     IsChecked = table.Column<bool>(type: "bit", nullable: false),
-                    ClientId = table.Column<int>(type: "int", nullable: true),
                     OrderId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Items", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Items_Client_ClientId",
-                        column: x => x.ClientId,
-                        principalTable: "Client",
-                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Items_Orders_OrderId",
                         column: x => x.OrderId,
@@ -120,11 +93,6 @@ namespace Retail_Data_Tracker.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Items_ClientId",
-                table: "Items",
-                column: "ClientId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Items_OrderId",
@@ -140,16 +108,6 @@ namespace Retail_Data_Tracker.Migrations
                 name: "IX_Orders_OrderClientId",
                 table: "Orders",
                 column: "OrderClientId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Orders_ShippingDetailsId",
-                table: "Orders",
-                column: "ShippingDetailsId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Shipping_clientId",
-                table: "Shipping",
-                column: "clientId");
         }
 
         /// <inheritdoc />
@@ -163,9 +121,6 @@ namespace Retail_Data_Tracker.Migrations
 
             migrationBuilder.DropTable(
                 name: "Suppliers");
-
-            migrationBuilder.DropTable(
-                name: "Shipping");
 
             migrationBuilder.DropTable(
                 name: "Client");
