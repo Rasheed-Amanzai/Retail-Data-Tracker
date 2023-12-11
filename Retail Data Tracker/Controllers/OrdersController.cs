@@ -34,7 +34,7 @@ namespace Retail_Data_Tracker.Controllers
             {
                 return NotFound();
             }
-
+            
             var order = await _context.Orders
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (order == null)
