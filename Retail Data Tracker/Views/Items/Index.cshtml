@@ -60,6 +60,7 @@
             </td>
             <td>
                         @Html.DisplayFor(m => m[i].ItemSupplier.Name)
+                        @Html.HiddenFor(m => m[i].ItemSupplier.Name)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@Model[i].Id">Edit</a> |
