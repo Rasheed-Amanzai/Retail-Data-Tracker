@@ -65,7 +65,15 @@
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </td>
+                <td>
+                    <input type="checkbox">
+                    <input type="number" min="0" max={@item.Quantity} />
+                </td>
         </tr>
 }
     </tbody>
 </table>
+<div class="form-group">
+    <button type="submit" class="btn btn-primary" name="CreateInvoice">Create invoice</button>
+    <button type="submit" class="btn btn-danger" name="OrderFromSupplier">Order from supplier</button>
+</div>
