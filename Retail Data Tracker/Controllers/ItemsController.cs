@@ -38,20 +38,50 @@ namespace Retail_Data_Tracker.Controllers
                 Console.WriteLine($"{item.Name} - IsChecked: {item.IsChecked}");
             }
             if (submitButton == "invoiceSubmit") {
-                Console.WriteLine(submitButton);
-                ViewBag.Message = "Invoice Created";
+                //Console.WriteLine(submitButton);
+                //ViewBag.Message = "Invoice Created";
                 var checkedItems = items.Where(x => x.IsChecked).ToList();
+                List<Quantity> quantity = new List<Quantity>();
+
+                foreach (var item in checkedItems)
+                {
+                    Quantity q = new Quantity();
+                    q.QuantityNumber = item.Quantity;
+                    quantity.Add(q);
+                }
+
+                if (checkedItems.Count == 0)
+                {
+                    var itemsL = _context.Items.Include(i => i.ItemSupplier);
+                    return View(itemsL.ToList());
+                }
+
+                foreach (var item in checkedItems)
+                {
+                    var itemx = await _context.Items.FindAsync(item.Id);
+                    if (itemx.Quantity == 0)
+                    {
+                        ViewBag.Message = "Not enough items in stock";
+                        var itemsL = _context.Items.Include(i => i.ItemSupplier);
+                        return View(itemsL.ToList());
+                    }
+                }
 
                 foreach (var item in checkedItems)
                 {
                     var itemx = await _context.Items.FindAsync(item.Id);
                     Console.WriteLine(item.Name);
                     ViewBag.Message += string.Format(" {0}", item.Name);
-                    item.Quantity -= 1;
-                    itemx.Quantity -= 1;
-                    _context.Update(itemx);
-                    await _context.SaveChangesAsync();
+                    //item.Quantity -= 1;
+                    //itemx.Quantity -= 1;
+                    //_context.Update(itemx);
+                    //await _context.SaveChangesAsync();
                 }
+
+                    TempData["checkedItems"] = checkedItems;
+                    TempData["quantities"] = quantity;
+
+                    return RedirectToAction("Create", "Orders");
             }
 
             var itemsList = _context.Items.Include(i => i.ItemSupplier);

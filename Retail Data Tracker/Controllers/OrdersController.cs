@@ -48,6 +48,24 @@ namespace Retail_Data_Tracker.Controllers
         // GET: Orders/Create
         public IActionResult Create()
         {
+            Order order = new Order();
+            var checkedItems = TempData["checkedItems"] as List<Item>;
+            var quantities = TempData["quantities"] as List<Quantity>;
+
+            order.Items = checkedItems;
+            order.Quantity = quantities;
+
+            // Update quantities
+            foreach (var item in checkedItems)
+            {
+                var item2 = _context.Items.Find(item.Id);
+                item.Quantity -= 1;
+                item2.Quantity -= 1;
+                _context.Update(item2);
+                _context.SaveChanges();
+            }
+
+            _context.Add(Order);
             return View();
         }
 
