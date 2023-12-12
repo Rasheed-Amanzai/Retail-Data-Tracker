@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 using Retail_Data_Tracker.Data;
 using Retail_Data_Tracker.Models;
 
@@ -19,13 +21,53 @@ namespace Retail_Data_Tracker.Controllers
             _context = context;
         }
 
+
+
+
         // GET: Orders
         public async Task<IActionResult> Index()
         {
-              return _context.Orders != null ? 
-                          View(await _context.Orders.ToListAsync()) :
-                          Problem("Entity set 'Retail_Data_TrackerContext.Orders'  is null.");
+            return _context.Orders.Include(i => i.OrderClient).ToList() != null ?
+                        View(await _context.Orders.ToListAsync()) :
+                        Problem("Entity set 'Retail_Data_TrackerContext.Orders'  is null.");
         }
+        
+        [HttpGet, ActionName("ItemDetails")]
+        public async Task<IActionResult> ItemDetails(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var order = await _context.Orders
+                                      .Include(o => o.Items)
+                                      .Include(o => o.Quantity) // Include quantities
+                                      .FirstOrDefaultAsync(o => o.Id == id);
+
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            var viewModel = new OrderDetailsViewModel
+            {
+                ItemQuantities = new List<ItemQuantityViewModel>(),
+                OrderTotal = order.OrderTotal
+            };
+
+            for (int i = 0; i < order.Items.Count; i++)
+            {
+                viewModel.ItemQuantities.Add(new ItemQuantityViewModel
+                {
+                    Item = order.Items[i],
+                    Quantity = order.Quantity[i].QuantityNumber
+                });
+            }
+
+            return View(viewModel);
+        }
+
 
         // GET: Orders/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -45,45 +87,72 @@ namespace Retail_Data_Tracker.Controllers
             return View(order);
         }
 
-        // GET: Orders/Create
-        public IActionResult Create()
+        private static Random random = new Random();
+
+        public static string RandomString(int length)
         {
-            Order order = new Order();
-            var checkedItems = TempData["checkedItems"] as List<Item>;
-            var quantities = TempData["quantities"] as List<Quantity>;
-
-            order.Items = checkedItems;
-            order.Quantity = quantities;
-
-            // Update quantities
-            foreach (var item in checkedItems)
-            {
-                var item2 = _context.Items.Find(item.Id);
-                item.Quantity -= 1;
-                item2.Quantity -= 1;
-                _context.Update(item2);
-                _context.SaveChanges();
-            }
-
-            _context.Add(Order);
-            return View();
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            return new string(Enumerable.Repeat(chars, length)
+                .Select(s => s[random.Next(s.Length)]).ToArray());
         }
 
         // POST: Orders/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,TrackingNumber,OrderDate,ShippingDate,ArrivalDate")] Order order)
+        public IActionResult Create()
         {
-            if (ModelState.IsValid)
+            Order order = new Order();
+            var checkedItemsJson = TempData["checkedItems"] as string;
+            var quantitiesJson = TempData["quantities"] as string;
+            var clientJson = TempData["client"] as string;
+
+            var checkedItems = JsonSerializer.Deserialize<List<Item>>(checkedItemsJson);
+            var quantities = JsonSerializer.Deserialize<List<Quantity>>(quantitiesJson);
+            var client = JsonSerializer.Deserialize<Client>(clientJson);
+            _context.Client.Attach(client);
+
+            List<Item> updatedItems = new List<Item>();
+            foreach (var item in checkedItems)
             {
-                _context.Add(order);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                var itemToUpdate = _context.Items.Find(item.Id);
+                if (itemToUpdate != null)
+                {
+                    itemToUpdate.Quantity -= 1;
+                    updatedItems.Add(itemToUpdate);
+                }
             }
-            return View(order);
+
+            //_context.SaveChanges();
+
+            order.Items = updatedItems;
+            order.Quantity = quantities;
+            order.OrderClient = client;
+            order.TrackingNumber = RandomString(8);
+            order.OrderDate = DateTime.Now;
+            order.ShippingDate = DateTime.Now.AddDays(1);
+            order.ArrivalDate = DateTime.Now.AddDays(2);
+
+            _context.Add(order);
+            _context.SaveChanges();
+
+            return Redirect("Index");
         }
+
+        //// POST: Orders/Create
+        //// To protect from overposting attacks, enable the specific properties you want to bind to.
+        //// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Create([Bind("Id,TrackingNumber,OrderDate,ShippingDate,ArrivalDate")] Order order)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        _context.Add(order);
+        //        await _context.SaveChangesAsync();
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    return View(order);
+        //}
 
         // GET: Orders/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -163,12 +232,15 @@ namespace Retail_Data_Tracker.Controllers
             {
                 return Problem("Entity set 'Retail_Data_TrackerContext.Orders'  is null.");
             }
-            var order = await _context.Orders.FindAsync(id);
+            var order = _context.Orders.Include(o => o.Quantity).Include(o => o.Items).FirstOrDefault(o => o.Id == id);
             if (order != null)
             {
+                _context.Items.RemoveRange(order.Items);
                 _context.Orders.Remove(order);
+                _context.SaveChanges();
             }
-            
+
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
