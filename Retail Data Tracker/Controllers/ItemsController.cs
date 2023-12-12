@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -25,14 +26,23 @@ namespace Retail_Data_Tracker.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            var items = _context.Items.Include(i => i.ItemSupplier);
-            return View(items.ToList());
+            var viewModel = new ItemClientViewModel
+            {
+
+                Items = _context.Items.Include(i => i.ItemSupplier).ToList(),
+                Clients = _context.Client.ToList()
+            };
+        //var items = _context.Items.Include(i => i.ItemSupplier);
+            return View(viewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Index(List<Item> items, string submitButton)
+        public async Task<IActionResult> Index(ItemClientViewModel model, string submitButton)
         {
+            var items = model.Items;
+            var client = _context.Client.Find(model.SelectedClientId);
+            Console.WriteLine($"{client.Name}");
             foreach (var item in items)
             {
                 Console.WriteLine($"{item.Name} - IsChecked: {item.IsChecked}");
@@ -46,7 +56,7 @@ namespace Retail_Data_Tracker.Controllers
                 foreach (var item in checkedItems)
                 {
                     Quantity q = new Quantity();
-                    q.QuantityNumber = item.Quantity;
+                    q.QuantityNumber = item.QuantityWanted;
                     quantity.Add(q);
                 }
 
@@ -78,14 +88,21 @@ namespace Retail_Data_Tracker.Controllers
                     //await _context.SaveChangesAsync();
                 }
 
-                    TempData["checkedItems"] = checkedItems;
-                    TempData["quantities"] = quantity;
+                    TempData["checkedItems"] = JsonSerializer.Serialize(checkedItems);
+                    TempData["quantities"] = JsonSerializer.Serialize(quantity);
+                    TempData["client"] = JsonSerializer.Serialize(client);
 
                     return RedirectToAction("Create", "Orders");
             }
 
-            var itemsList = _context.Items.Include(i => i.ItemSupplier);
-            return View(itemsList.ToList());
+            var viewModel = new ItemClientViewModel
+            {
+
+                Items = _context.Items.Include(i => i.ItemSupplier).ToList(),
+                Clients = _context.Client.ToList()
+            };
+            //var items = _context.Items.Include(i => i.ItemSupplier);
+            return View(viewModel);
         }
         // GET: Items/Details/5
         public async Task<IActionResult> Details(int? id)
