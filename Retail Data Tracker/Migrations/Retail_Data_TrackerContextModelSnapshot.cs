@@ -75,6 +75,9 @@ namespace Retail_Data_Tracker.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
+                    b.Property<int>("QuantityWanted")
+                        .HasColumnType("int");
+
                     b.Property<double>("SellCost")
                         .HasColumnType("float");
 
@@ -98,20 +101,17 @@ namespace Retail_Data_Tracker.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("ArrivalDate")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("ArrivalDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("OrderClientId")
                         .HasColumnType("int");
 
-                    b.Property<string>("OrderDate")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("OrderDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("ShippingDate")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("ShippingDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("TrackingNumber")
                         .IsRequired()
