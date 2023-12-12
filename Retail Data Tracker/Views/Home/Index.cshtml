@@ -2,7 +2,48 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<style>
+    .btn a {
+        color: white;
+        text-decoration: none
+    }
+
+    body {
+        background-color: #F1F1F1;
+    }
+
+    .parent {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .child {
+        height: auto;
+        width: 150px;
+        margin: 10px auto;
+    }
+</style>
+
+<div class="parent btn-group-lg text-center">
+
+    <h1 class="display-4">Retail Data Tracker</h1>
+
+    <h3>A simple store management webpage application</h3>
+
+    <div class="child btn btn-success">
+        @Html.ActionLink("Clients", "ClientsView")
+    </div>
+
+    <div class="child btn btn-success">
+        @Html.ActionLink("Items", "ItemsView")
+    </div>
+
+    <div class="child btn btn-success">
+        @Html.ActionLink("Orders", "OrdersView")
+    </div>
+
+    <div class="child btn btn-success">
+        @Html.ActionLink("Suppliers", "SuppliersView")
+    </div>
 </div>
