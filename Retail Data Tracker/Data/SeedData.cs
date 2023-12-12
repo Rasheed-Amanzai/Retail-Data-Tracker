@@ -93,9 +93,9 @@ public static class SeedData
                     Items = new List<Item> { context.Items.Where(i => i.Id == 1).FirstOrDefault() },
                     Quantity = new List<Quantity>(),
                     TrackingNumber = "ABC123456789",
-                    OrderDate = "May 20th, 2023",
-                    ShippingDate = "May 22nd, 2023",
-                    ArrivalDate = "May 25th, 2023",
+                    OrderDate = new DateTime(2023, 5, 20, 0, 0, 0, DateTimeKind.Utc),
+                    ShippingDate = new DateTime(2023, 5, 23, 0, 0, 0, DateTimeKind.Utc),
+                    ArrivalDate = new DateTime(2023, 5, 25, 0, 0, 0, DateTimeKind.Utc),
                     OrderClient = context.Client.Where(i => i.Id == 1).FirstOrDefault()
                 },
                 new Order()
@@ -103,9 +103,9 @@ public static class SeedData
                     Items = new List<Item> { context.Items.Find(1), context.Items.Find(3) },
                     Quantity = new List<Quantity>(),
                     TrackingNumber = "XYZ987654321",
-                    OrderDate = "October 12th, 2023",
-                    ShippingDate = "October 13th, 2023",
-                    ArrivalDate = "October 15th, 2023",
+                    OrderDate = new DateTime(2023, 10, 12, 0, 0, 0, DateTimeKind.Utc),
+                    ShippingDate = new DateTime(2023, 10, 13, 0, 0, 0, DateTimeKind.Utc),
+                    ArrivalDate = new DateTime(2023, 10, 15, 0, 0, 0, DateTimeKind.Utc),
                     OrderClient = context.Client.Where(i => i.Id == 2).FirstOrDefault()
 
                 },
@@ -114,9 +114,9 @@ public static class SeedData
                     Items = new List<Item> { context.Items.Find(4), context.Items.Find(2) },
                     Quantity = new List<Quantity>(),
                     TrackingNumber = "QWE789456123",
-                    OrderDate = "April 3rd, 2023",
-                    ShippingDate = "April 5th, 2023",
-                    ArrivalDate = "April 7th, 2023",
+                    OrderDate = new DateTime(2023, 4, 4, 0, 0, 0, DateTimeKind.Utc),
+                    ShippingDate = new DateTime(2023, 4, 5, 0, 0, 0, DateTimeKind.Utc),
+                    ArrivalDate = new DateTime(2023, 4, 7, 0, 0, 0, DateTimeKind.Utc),
                     OrderClient = context.Client.Where(i => i.Id == 3).FirstOrDefault()
                 }
             );
