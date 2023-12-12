@@ -1,4 +1,4 @@
-﻿@model List<Retail_Data_Tracker.Models.Item>
+﻿@model ItemClientViewModel
 
 @{
     ViewData["Title"] = "Index";
@@ -36,49 +36,51 @@
         </tr>
     </thead>
     <tbody>
-@for (int i = 0; i < Model.Count; i++) {
+@for (int i = 0; i < Model.Items.Count; i++) {
         <tr>
             <td>
-                @Html.DisplayFor(m => m[i].Name)
-                @Html.HiddenFor(m => m[i].Name)
+                @Html.DisplayFor(m => m.Items[i].Name)
+                @Html.HiddenFor(m => m.Items[i].Name)
             </td>
             <td>
-                        @Html.DisplayFor(m => m[i].ItemDesc)
-                        @Html.HiddenFor(m => m[i].ItemDesc)
+                        @Html.DisplayFor(m => m.Items[i].ItemDesc)
+                        @Html.HiddenFor(m => m.Items[i].ItemDesc)
             </td>
             <td>
-                        @Html.DisplayFor(m => m[i].Quantity)
-                        @Html.HiddenFor(m => m[i].Quantity)
+                        @Html.DisplayFor(m => m.Items[i].Quantity)
+                        @Html.HiddenFor(m => m.Items[i].Quantity)
             </td>
             <td>
-                        @Html.DisplayFor(m => m[i].BuyCost)
-                        @Html.HiddenFor(m => m[i].BuyCost)
+                        @Html.DisplayFor(m => m.Items[i].BuyCost)
+                        @Html.HiddenFor(m => m.Items[i].BuyCost)
             </td>
             <td>
-                        @Html.DisplayFor(m => m[i].SellCost)
-                        @Html.HiddenFor(m => m[i].SellCost)
+                        @Html.DisplayFor(m => m.Items[i].SellCost)
+                        @Html.HiddenFor(m => m.Items[i].SellCost)
             </td>
             <td>
-                        @Html.DisplayFor(m => m[i].ItemSupplier.Name)
-                        @Html.HiddenFor(m => m[i].ItemSupplier.Name)
+                        @Html.DisplayFor(m => m.Items[i].ItemSupplier.Name)
+                        @Html.HiddenFor(m => m.Items[i].ItemSupplier.Name)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@Model[i].Id">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@Model[i].Id">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@Model[i].Id">Delete</a>
+                <a asp-action="Edit" asp-route-id="@Model.Items[i].Id">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@Model.Items[i].Id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@Model.Items[i].Id">Delete</a>
             </td>
                 <td>
-                        @Html.CheckBoxFor(m => m[i].IsChecked)
-                        @Html.HiddenFor(m => m[i].Id)
+                        @Html.CheckBoxFor(m => m.Items[i].IsChecked)
+                        @Html.HiddenFor(m => m.Items[i].Id)
                 </td>
                 <td>
-                        @Html.TextBox("Quantity", 1, new { type = "number", min = 1, max = Model[i].Quantity, name = $"Model[{i}].Quantity" })
+                        @Html.TextBox("QuantityWanted", 1, new { type = "number", min = 1, max = Model.Items[i].Quantity, name = $"Model[{i}].QuantityWanted" })
                 </td>
         </tr>
 }
     </tbody>
 </table>
 <br />
+@Html.DropDownListFor(m => m.SelectedClientId, new SelectList(Model.Clients, "Id", "Name"), "Select a client")
+    @Html.HiddenFor(model => model.SelectedClientId, new { id = "hiddenDropdownValue" })
     <button class="btn btn-primary" name="submitButton" value="invoiceSubmit">Create invoice</button>
     <button type="submit" class="btn btn-danger" name="submitButton" value="orderFromSupplier">Order from supplier</button>
 }
