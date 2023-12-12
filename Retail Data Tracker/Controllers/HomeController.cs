@@ -13,6 +13,26 @@ namespace Retail_Data_Tracker.Controllers
             return View();
         }
 
+        public ActionResult ClientsView()
+        {
+            return RedirectToAction("Index", "Clients");
+        }
+
+        public ActionResult ItemsView()
+        {
+            return RedirectToAction("Index", "Items");
+        }
+
+        public ActionResult OrdersView()
+        {
+            return RedirectToAction("Index", "Orders");
+        }
+
+        public ActionResult SuppliersView()
+        {
+            return RedirectToAction("Index", "Suppliers");
+        }
+
         public ActionResult OrderForm(Order order)
         {
             // TODO: Handle Order form submission when user wants to create a new invoice/order,
