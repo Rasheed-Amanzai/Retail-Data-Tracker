@@ -33,13 +33,6 @@ namespace Retail_Data_Tracker.Controllers
             return RedirectToAction("Index", "Suppliers");
         }
 
-        public ActionResult OrderForm(Order order)
-        {
-            // TODO: Handle Order form submission when user wants to create a new invoice/order,
-            // and if successful, redirect the user to a confirmation page (or a different page)
-            return View(order);
-        } 
-
         [HttpPost]
         public ActionResult Inventory(string CreateInvoice, Order order, Retail_Data_TrackerContext retailContext)
         {

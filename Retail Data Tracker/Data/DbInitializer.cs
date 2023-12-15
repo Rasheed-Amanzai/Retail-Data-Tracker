@@ -79,9 +79,9 @@ namespace Retail_Data_Tracker.Data
                 new Supplier() {Id = 1, Name = "Winston's Wild Wheats", Address = "123 Farmer Road", 
                     Description = "A small farm that grows wheat and other grain products.", SupplierInventory = new List<Item>(items) },
                 new Supplier() {Id = 2, Name = "Frank's Fruits", Address = "456 Plantation Drive",
-                    Description = "A large farm that produces a wide variety of fruit products.", SupplierInventory = new List<Item>(items) }, // TODO: Add fruit items to inventory
+                    Description = "A large farm that produces a wide variety of fruit products.", SupplierInventory = new List<Item>() }, // TODO: Add fruit items to inventory
                 new Supplier() {Id = 3, Name = "Vennessa's Veggies", Address = "789 Vine Avenue",
-                    Description = "A small farm that grows fresh vegetables.", SupplierInventory = new List<Item>(items) } // TODO: Add vegetable items to inventory
+                    Description = "A small farm that grows fresh vegetables.", SupplierInventory = new List<Item>() } // TODO: Add vegetable items to inventory
             };
 
             foreach (var s in suppliers)
