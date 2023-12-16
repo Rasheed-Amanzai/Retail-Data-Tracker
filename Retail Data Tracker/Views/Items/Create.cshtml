@@ -1,8 +1,4 @@
-﻿@model Retail_Data_Tracker.Models.Item
-
-@{
-    ViewData["Title"] = "Create";
-}
+﻿@model Retail_Data_Tracker.Models.ItemCreateViewModel
 
 <h1>Create</h1>
 
@@ -10,7 +6,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-controller="Items" asp-action="Create" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
@@ -28,8 +24,9 @@
                 <span asp-validation-for="Quantity" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="SupplierId" class="control-label"></label>
-                <select asp-for="SupplierId" class ="form-control" asp-items="ViewBag.SupplierId"></select>
+                <label asp-for="SupplierId" class="control-label">Select a supplier</label>
+                <select asp-for="SupplierId" class="form-control" asp-items='new SelectList(Model.Suppliers, "Id", "Name")'></select>
+                <span asp-validation-for="SupplierId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="BuyCost" class="control-label"></label>
@@ -41,12 +38,20 @@
                 <input asp-for="SellCost" class="form-control" />
                 <span asp-validation-for="SellCost" class="text-danger"></span>
             </div>
+            <input type="hidden" asp-for="Name" />
+            <input type="hidden" asp-for="ItemDesc" />
+            <input type="hidden" asp-for="Quantity" />
+            <input type="hidden" asp-for="BuyCost" />
+            <input type="hidden" asp-for="SellCost" />
+            <input type="hidden" asp-for="SupplierId"/>
+
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
+
 
 <div>
     <a asp-action="Index">Back to List</a>
