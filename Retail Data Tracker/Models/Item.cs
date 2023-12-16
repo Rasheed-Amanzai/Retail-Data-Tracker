@@ -17,16 +17,11 @@ namespace Retail_Data_Tracker.Models
         public double BuyCost { get; set;}
         public double SellCost {get; set;}
         public bool IsChecked { get; set; }
-        public Supplier ItemSupplier { get; set; }
-
-        public Supplier GetSupplier()
-        {
-            return ItemSupplier;
-        }
-
-        public void SetSupplier(Supplier supplier)
-        {
-            ItemSupplier = SupplierRepository.Suppliers.FirstOrDefault(s => s.Id == SupplierId);
+        public Supplier ItemSupplier { get
+            {
+                var itemSupplier = SupplierRepository.Suppliers.FirstOrDefault(s => s.Id == SupplierId);
+                return itemSupplier;
+            }
         }
 
         public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
