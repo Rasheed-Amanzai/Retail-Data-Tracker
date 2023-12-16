@@ -88,7 +88,7 @@ namespace Retail_Data_Tracker.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Address,Description")] Client client)
+        public async Task<IActionResult> Edit(int id, [Bind("Name,Address,Description")] Client client)
         {
             if (id != client.Id)
             {

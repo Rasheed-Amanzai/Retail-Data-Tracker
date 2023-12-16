@@ -56,13 +56,20 @@ namespace Retail_Data_Tracker.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Address,Description")] Supplier supplier)
+        public async Task<IActionResult> Create([Bind("Name,Address,Description")] Supplier supplier)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(supplier);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
+            }
+            foreach (var entry in ModelState)
+            {
+                foreach (var error in entry.Value.Errors)
+                {
+                    Console.WriteLine($"Property: {entry.Key}, Error: {error.ErrorMessage}");
+                }
             }
             return View(supplier);
         }

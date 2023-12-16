@@ -11,6 +11,6 @@ namespace Retail_Data_Tracker.Models
         public string Name { get; set; }
         public string Address { get; set; }
         public string Description { get; set; }
-        public List<Item> SupplierInventory { get; set; }
+        public List<Item> SupplierInventory { get; set; } = new List<Item>();
     }
 }
