@@ -57,7 +57,8 @@ public static class SeedData
                 new Item() { Name = "Sliced Whole Wheat Bread Loaf", ItemDesc = "Sliced", BuyCost = 0.75, SellCost = 3.00, Quantity = 100, SupplierId = 1 },
                 new Item() { Name = "Sliced White Bread Loaf", ItemDesc = "Sliced", BuyCost = 0.75, SellCost = 3.00, Quantity = 100, SupplierId = 1 },
                 new Item() { Name = "1kg Whole Wheat Flour", ItemDesc = "Flour good for any of your baking needs", BuyCost = 0.25, SellCost = 2.00, Quantity = 100, SupplierId = 1 },
-                new Item() { Name = "500g Ranch Croutons", ItemDesc = "Croutons with a ranch flavor", BuyCost = 1.00, SellCost = 5.00, Quantity = 100, SupplierId = 1 }
+                new Item() { Name = "500g Ranch Croutons", ItemDesc = "Croutons with a ranch flavor", BuyCost = 1.00, SellCost = 5.00, Quantity = 100, SupplierId = 1 },
+                new Item() { Name = "Papaya", ItemDesc = "A tropical fruit", BuyCost = 0.50, SellCost = 2.00, Quantity = 100, SupplierId = 2 }
             );
             context.SaveChanges();
 
@@ -81,6 +82,13 @@ public static class SeedData
                     Name = "Sobeys",
                     Address = "3842 Alsogrocery Avenue",
                     Description = "Sobeys is a Canadian grocery chain known for its quality fresh produce, groceries, and household items.",
+                    ClientOrder = new List<Order>()
+                },
+                new Client()
+                {
+                    Name = "You",
+                    Address = "1234 Your Street",
+                    Description = "Our Service!",
                     ClientOrder = new List<Order>()
                 }
                 );
