@@ -16,6 +16,7 @@ namespace Retail_Data_Tracker.Data
                 return; // Database has already been seeded
             }
 
+
             // Item entities
             var items = new Item[]
             {
@@ -35,36 +36,36 @@ namespace Retail_Data_Tracker.Data
             }
             context.SaveChanges();
 
-            // Order Entities
-            var orders = new Order[] {
-                new Order() { Id = 1, Items = new List<Item>(items), Quantity = new List<Quantity>(),
-                    TrackingNumber = "ABC123456789", OrderDate = new DateTime(2023, 5, 20, 0, 0, 0, DateTimeKind.Utc), ShippingDate = new DateTime(2023, 5, 23, 0, 0, 0, DateTimeKind.Utc),
-                    ArrivalDate = new DateTime(2023, 5, 25, 0, 0, 0, DateTimeKind.Utc), OrderClient = new Client()},
-                new Order() { Id = 2, Items = new List<Item>(items), Quantity = new List<Quantity>(),
-                    TrackingNumber = "XYZ987654321", OrderDate = new DateTime(2023, 10, 12, 0, 0, 0, DateTimeKind.Utc), ShippingDate = new DateTime(2023, 10, 13, 0, 0, 0, DateTimeKind.Utc),
-                    ArrivalDate = new DateTime(2023, 10, 13, 0, 0, 0, DateTimeKind.Utc), OrderClient = new Client() }, 
-                new Order() { Id = 3, Items = new List<Item>(items), Quantity = new List<Quantity>(),
-                    TrackingNumber = "QWE789456123", OrderDate = new DateTime(2023, 4, 3, 0, 0, 0, DateTimeKind.Utc), ShippingDate = new DateTime(2023, 4, 5, 0, 0, 0, DateTimeKind.Utc),
-                    ArrivalDate = new DateTime(2023, 4, 7, 0, 0, 0, DateTimeKind.Utc), OrderClient = new Client() }
-            };
+            //// Order Entities
+            //var orders = new Order[] {
+            //    new Order() { Id = 1, OrderItems = new List < OrderItem >().Add(items),
+            //        TrackingNumber = "ABC123456789", OrderDate = new DateTime(2023, 5, 20, 0, 0, 0, DateTimeKind.Utc), ShippingDate = new DateTime(2023, 5, 23, 0, 0, 0, DateTimeKind.Utc),
+            //        ArrivalDate = new DateTime(2023, 5, 25, 0, 0, 0, DateTimeKind.Utc), OrderClient = new Client()},
+            //    new Order() { Id = 2, Items = new List<Item>(items), Quantity = new List<Quantity>(),
+            //        TrackingNumber = "XYZ987654321", OrderDate = new DateTime(2023, 10, 12, 0, 0, 0, DateTimeKind.Utc), ShippingDate = new DateTime(2023, 10, 13, 0, 0, 0, DateTimeKind.Utc),
+            //        ArrivalDate = new DateTime(2023, 10, 13, 0, 0, 0, DateTimeKind.Utc), OrderClient = new Client() }, 
+            //    new Order() { Id = 3, Items = new List<Item>(items), Quantity = new List<Quantity>(),
+            //        TrackingNumber = "QWE789456123", OrderDate = new DateTime(2023, 4, 3, 0, 0, 0, DateTimeKind.Utc), ShippingDate = new DateTime(2023, 4, 5, 0, 0, 0, DateTimeKind.Utc),
+            //        ArrivalDate = new DateTime(2023, 4, 7, 0, 0, 0, DateTimeKind.Utc), OrderClient = new Client() }
+            //};
 
-            foreach (var o in orders) 
-            {  
-                context.Orders.Add(o); 
-            }
-            context.SaveChanges();
+            //foreach (var o in orders) 
+            //{  
+            //    context.Orders.Add(o); 
+            //}
+            //context.SaveChanges();
 
             // Client Entities
             var clients = new Client[]{ 
                 new Client() { Id = 1, Name = "Food Basics", Address = "4652 Grocery Street",
                     Description = "Food Basics is a grocery store chain that provides a wide selection of essential food items and household products at affordable prices.",
-                    ClientOrder = new List<Order>(orders)},
+                    ClientOrder = new List<Order>()},
                 new Client() { Id = 2, Name = "Loblaws", Address = "372 Competing Drive",
                     Description = "Loblaws is a Canadian supermarket chain offering a diverse range of groceries, fresh produce, household goods, and services in a modern retail environment.",
-                    ClientOrder = new List<Order>(orders)},
+                    ClientOrder = new List<Order>()},
                 new Client() { Id = 3, Name = "Sobeys", Address = "3842 Alsogrocery Avenue",
                     Description = "Sobeys is a Canadian grocery chain known for its quality fresh produce, groceries, and household items.",
-                    ClientOrder = new List<Order>(orders)}
+                    ClientOrder = new List<Order>()}
             };
 
             foreach (var c in clients) 

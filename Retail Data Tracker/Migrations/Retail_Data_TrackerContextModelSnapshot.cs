@@ -69,9 +69,6 @@ namespace Retail_Data_Tracker.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("OrderId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
@@ -85,8 +82,6 @@ namespace Retail_Data_Tracker.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("OrderId");
 
                     b.HasIndex("SupplierId");
 
@@ -124,25 +119,22 @@ namespace Retail_Data_Tracker.Migrations
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("Retail_Data_Tracker.Models.Quantity", b =>
+            modelBuilder.Entity("Retail_Data_Tracker.Models.OrderItem", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("OrderId")
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("OrderId")
+                    b.Property<int>("ItemId")
                         .HasColumnType("int");
 
                     b.Property<int>("QuantityNumber")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("OrderId", "ItemId");
 
-                    b.HasIndex("OrderId");
+                    b.HasIndex("ItemId");
 
-                    b.ToTable("Quantity");
+                    b.ToTable("OrderItem");
                 });
 
             modelBuilder.Entity("Retail_Data_Tracker.Models.Supplier", b =>
@@ -172,10 +164,6 @@ namespace Retail_Data_Tracker.Migrations
 
             modelBuilder.Entity("Retail_Data_Tracker.Models.Item", b =>
                 {
-                    b.HasOne("Retail_Data_Tracker.Models.Order", null)
-                        .WithMany("Items")
-                        .HasForeignKey("OrderId");
-
                     b.HasOne("Retail_Data_Tracker.Models.Supplier", "ItemSupplier")
                         .WithMany("SupplierInventory")
                         .HasForeignKey("SupplierId")
@@ -196,11 +184,23 @@ namespace Retail_Data_Tracker.Migrations
                     b.Navigation("OrderClient");
                 });
 
-            modelBuilder.Entity("Retail_Data_Tracker.Models.Quantity", b =>
+            modelBuilder.Entity("Retail_Data_Tracker.Models.OrderItem", b =>
                 {
-                    b.HasOne("Retail_Data_Tracker.Models.Order", null)
-                        .WithMany("Quantity")
-                        .HasForeignKey("OrderId");
+                    b.HasOne("Retail_Data_Tracker.Models.Item", "Item")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Retail_Data_Tracker.Models.Order", "Order")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Item");
+
+                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("Retail_Data_Tracker.Models.Client", b =>
@@ -208,11 +208,14 @@ namespace Retail_Data_Tracker.Migrations
                     b.Navigation("ClientOrder");
                 });
 
+            modelBuilder.Entity("Retail_Data_Tracker.Models.Item", b =>
+                {
+                    b.Navigation("OrderItems");
+                });
+
             modelBuilder.Entity("Retail_Data_Tracker.Models.Order", b =>
                 {
-                    b.Navigation("Items");
-
-                    b.Navigation("Quantity");
+                    b.Navigation("OrderItems");
                 });
 
             modelBuilder.Entity("Retail_Data_Tracker.Models.Supplier", b =>
