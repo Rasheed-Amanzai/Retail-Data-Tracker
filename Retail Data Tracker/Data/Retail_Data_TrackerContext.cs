@@ -18,6 +18,17 @@ namespace Retail_Data_Tracker.Data
         public DbSet<Retail_Data_Tracker.Models.Supplier> Suppliers { get; set; } = default!;
         public DbSet<Retail_Data_Tracker.Models.Order> Orders { get; set; } = default!;
         public DbSet<Retail_Data_Tracker.Models.Client> Client { get; set; } = default!;
+        public object OrderItems { get; internal set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<OrderItem>()
+                .HasKey(oi => new { oi.OrderId, oi.ItemId });
+
+            // Other entity configurations...
+
+            base.OnModelCreating(modelBuilder);
+        }
 
     }
 }
