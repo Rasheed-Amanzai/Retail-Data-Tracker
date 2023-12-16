@@ -6,6 +6,7 @@ public class OrderDetailsViewModel
 {
     public List<ItemQuantityViewModel> ItemQuantities { get; set; } = new List<ItemQuantityViewModel>();
     public double OrderTotal { get; set; }
+    public OrderType OrderType { get; set; }
 
     public OrderDetailsViewModel(Order order)
     {
@@ -20,5 +21,6 @@ public class OrderDetailsViewModel
         }
 
         OrderTotal = order.OrderTotal;
+        OrderType = order.OrderType;
     }
 }
