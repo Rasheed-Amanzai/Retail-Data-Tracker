@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Retail_Data_Tracker.Data;
 
@@ -11,9 +12,11 @@ using Retail_Data_Tracker.Data;
 namespace Retail_Data_Tracker.Migrations
 {
     [DbContext(typeof(Retail_Data_TrackerContext))]
-    partial class Retail_Data_TrackerContextModelSnapshot : ModelSnapshot
+    [Migration("20231216164930_Migr2")]
+    partial class Migr2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -169,13 +172,11 @@ namespace Retail_Data_Tracker.Migrations
 
             modelBuilder.Entity("Retail_Data_Tracker.Models.Item", b =>
                 {
-                    b.HasOne("Retail_Data_Tracker.Models.Supplier", "ItemSupplier")
+                    b.HasOne("Retail_Data_Tracker.Models.Supplier", null)
                         .WithMany("SupplierInventory")
                         .HasForeignKey("SupplierId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("ItemSupplier");
                 });
 
             modelBuilder.Entity("Retail_Data_Tracker.Models.Order", b =>

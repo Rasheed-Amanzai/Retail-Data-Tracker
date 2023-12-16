@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Retail_Data_Tracker.Data;
 
@@ -11,9 +12,11 @@ using Retail_Data_Tracker.Data;
 namespace Retail_Data_Tracker.Migrations
 {
     [DbContext(typeof(Retail_Data_TrackerContext))]
-    partial class Retail_Data_TrackerContextModelSnapshot : ModelSnapshot
+    [Migration("20231216172756_Migr3")]
+    partial class Migr3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
