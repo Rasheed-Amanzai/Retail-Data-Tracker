@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace Retail_Data_Tracker.Models
 {
+    public enum OrderType { Retailer, Supplier }
 
     public class Order
     {
@@ -26,19 +27,29 @@ namespace Retail_Data_Tracker.Models
         public DateTime ArrivalDate { get; set; }
         public Client OrderClient { get; set; } = new Client();
         public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
+        public OrderType OrderType { get; set; }
 
         public double OrderTotal
         {
             get
             {
                 double orderTotalNumber = 0;
-                if (OrderItems != null)
+                if (OrderType == OrderType.Retailer)
                 {
                     foreach (var orderItem in OrderItems)
                     {
                         if (orderItem.Item != null)
                         {
                             orderTotalNumber += orderItem.Item.SellCost * orderItem.QuantityNumber;
+                        }
+                    }
+                } else if (OrderType == OrderType.Supplier)
+                {
+                    foreach (var orderItem in OrderItems)
+                    {
+                        if (orderItem.Item != null)
+                        {
+                            orderTotalNumber += orderItem.Item.BuyCost * orderItem.QuantityNumber;
                         }
                     }
                 }
