@@ -67,9 +67,7 @@
                         @Html.HiddenFor(m => m.Items[i].SupplierId)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@Model.Items[i].Id">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@Model.Items[i].Id">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@Model.Items[i].Id">Delete</a>
+                        <a asp-action="Details" asp-route-id="@Model.Items[i].Id">Details</a>
             </td>
                 <td>
                         @Html.CheckBoxFor(m => m.Items[i].IsChecked)

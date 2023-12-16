@@ -119,7 +119,7 @@ namespace Retail_Data_Tracker.Controllers
                     var itemToUpdate = _context.Items.Find(item.Id);
                     if (itemToUpdate != null)
                     {
-                        itemToUpdate.Quantity -= 1;
+                        itemToUpdate.Quantity -= itemToUpdate.QuantityWanted;
                         _context.Update(itemToUpdate);
                         OrderItem orderItem = new OrderItem
                         {
@@ -203,7 +203,7 @@ namespace Retail_Data_Tracker.Controllers
                     var itemToUpdate = _context.Items.Find(item.Id);
                     if (itemToUpdate != null)
                     {
-                        itemToUpdate.Quantity += 1;
+                        itemToUpdate.Quantity -= itemToUpdate.QuantityWanted;
                         _context.Update(itemToUpdate);
                         OrderItem orderItem = new OrderItem
                         {
@@ -312,35 +312,21 @@ namespace Retail_Data_Tracker.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,ItemDesc,Quantity,SupplierId,BuyCost,SellCost,IsChecked")] Item item)
+        public async Task<IActionResult> Edit(int id, [Bind("Name,ItemDesc,Quantity,SupplierId,BuyCost,SellCost")] Item item)
         {
             if (id != item.Id)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            _context.Update(item);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+            var viewModel = new ItemCreateViewModel
             {
-                try
-                {
-                    _context.Update(item);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ItemExists(item.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["SupplierId"] = new SelectList(_context.Set<Supplier>(), "Id", "Id", item.SupplierId);
-            return View(item);
+                Suppliers = _context.Suppliers.ToList()
+            };
+            return View(viewModel);
         }
 
         // GET: Items/Delete/5
