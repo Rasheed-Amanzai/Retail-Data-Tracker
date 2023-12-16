@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -36,6 +37,15 @@ namespace Retail_Data_Tracker.Controllers
             return View(viewModel);
         }
 
+        private static Random random = new Random();
+
+        public static string RandomString(int length)
+        {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            return new string(Enumerable.Repeat(chars, length)
+                .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Index(ItemClientViewModel model, string submitButton)
@@ -57,6 +67,7 @@ namespace Retail_Data_Tracker.Controllers
                 {
                     Quantity q = new Quantity();
                     q.QuantityNumber = item.QuantityWanted;
+                    Console.WriteLine(item.QuantityWanted);
                     quantity.Add(q);
                 }
 
@@ -68,6 +79,7 @@ namespace Retail_Data_Tracker.Controllers
 
                 foreach (var item in checkedItems)
                 {
+                    Console.WriteLine(item.Id);
                     var itemx = await _context.Items.FindAsync(item.Id);
                     if (itemx.Quantity == 0)
                     {
@@ -87,12 +99,42 @@ namespace Retail_Data_Tracker.Controllers
                     //_context.Update(itemx);
                     //await _context.SaveChangesAsync();
                 }
+                Order order = new Order();
+                _context.Client.Attach(client);
 
-                    TempData["checkedItems"] = JsonSerializer.Serialize(checkedItems);
-                    TempData["quantities"] = JsonSerializer.Serialize(quantity);
-                    TempData["client"] = JsonSerializer.Serialize(client);
+                foreach (var item in checkedItems)
+                {
+                    var itemToUpdate = _context.Items.Find(item.Id);
+                    if (itemToUpdate != null)
+                    {
+                        itemToUpdate.Quantity -= 1;
+                        _context.Update(itemToUpdate);
+                        OrderItem orderItem = new OrderItem
+                        {
+                            Item = itemToUpdate,
+                            Order = order,
+                            QuantityNumber = item.QuantityWanted
+                        };
+                        order.OrderItems.Add(orderItem);
+                        Console.WriteLine("Yes!:" + order.OrderItems.Count);
+                        await _context.SaveChangesAsync();
+                    }
+                }
 
-                    return RedirectToAction("Create", "Orders");
+                order.OrderClient = client;
+                order.TrackingNumber = RandomString(8);
+                order.OrderDate = DateTime.Now;
+                order.ShippingDate = DateTime.Now.AddDays(1);
+                order.ArrivalDate = DateTime.Now.AddDays(2);
+
+                Console.WriteLine(order.OrderItems.Count);
+                Console.WriteLine(order.OrderTotal);
+
+
+                _context.Add(order);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("Index", "Orders");
             }
 
             var viewModel = new ItemClientViewModel

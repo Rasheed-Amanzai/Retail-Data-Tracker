@@ -27,7 +27,17 @@ namespace Retail_Data_Tracker.Controllers
         // GET: Orders
         public async Task<IActionResult> Index()
         {
-            return _context.Orders.Include(i => i.OrderClient).ToList() != null ?
+            var orders = _context.Orders.Include(o => o.OrderClient)
+    .Include(o => o.OrderItems)
+        .ThenInclude(oi => oi.Item)
+    .ToList();
+
+            foreach (var order in orders)
+            {
+                Console.WriteLine(order.OrderTotal.ToString("C2"));
+            }
+
+            return orders != null ?
                         View(await _context.Orders.ToListAsync()) :
                         Problem("Entity set 'Retail_Data_TrackerContext.Orders'  is null.");
         }
@@ -40,30 +50,18 @@ namespace Retail_Data_Tracker.Controllers
                 return NotFound();
             }
 
-            var order = await _context.Orders
-                                      .Include(o => o.Items)
-                                      .Include(o => o.Quantity) // Include quantities
-                                      .FirstOrDefaultAsync(o => o.Id == id);
+            var order = _context.Orders
+    .Include(o => o.OrderItems)
+        .ThenInclude(oi => oi.Item) // Include the related Item entities within OrderItems
+    .FirstOrDefault(o => o.Id == id);
 
             if (order == null)
             {
                 return NotFound();
             }
 
-            var viewModel = new OrderDetailsViewModel
-            {
-                ItemQuantities = new List<ItemQuantityViewModel>(),
-                OrderTotal = order.OrderTotal
-            };
+            var viewModel = new OrderDetailsViewModel(order);
 
-            for (int i = 0; i < order.Items.Count; i++)
-            {
-                viewModel.ItemQuantities.Add(new ItemQuantityViewModel
-                {
-                    Item = order.Items[i],
-                    Quantity = order.Quantity[i].QuantityNumber
-                });
-            }
 
             return View(viewModel);
         }
@@ -94,48 +92,6 @@ namespace Retail_Data_Tracker.Controllers
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             return new string(Enumerable.Repeat(chars, length)
                 .Select(s => s[random.Next(s.Length)]).ToArray());
-        }
-
-        // POST: Orders/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Create()
-        {
-            Order order = new Order();
-            var checkedItemsJson = TempData["checkedItems"] as string;
-            var quantitiesJson = TempData["quantities"] as string;
-            var clientJson = TempData["client"] as string;
-
-            var checkedItems = JsonSerializer.Deserialize<List<Item>>(checkedItemsJson);
-            var quantities = JsonSerializer.Deserialize<List<Quantity>>(quantitiesJson);
-            var client = JsonSerializer.Deserialize<Client>(clientJson);
-            _context.Client.Attach(client);
-
-            List<Item> updatedItems = new List<Item>();
-            foreach (var item in checkedItems)
-            {
-                var itemToUpdate = _context.Items.Find(item.Id);
-                if (itemToUpdate != null)
-                {
-                    itemToUpdate.Quantity -= 1;
-                    updatedItems.Add(itemToUpdate);
-                }
-            }
-
-            //_context.SaveChanges();
-
-            order.Items = updatedItems;
-            order.Quantity = quantities;
-            order.OrderClient = client;
-            order.TrackingNumber = RandomString(8);
-            order.OrderDate = DateTime.Now;
-            order.ShippingDate = DateTime.Now.AddDays(1);
-            order.ArrivalDate = DateTime.Now.AddDays(2);
-
-            _context.Add(order);
-            _context.SaveChanges();
-
-            return Redirect("Index");
         }
 
         //// POST: Orders/Create
@@ -232,10 +188,9 @@ namespace Retail_Data_Tracker.Controllers
             {
                 return Problem("Entity set 'Retail_Data_TrackerContext.Orders'  is null.");
             }
-            var order = _context.Orders.Include(o => o.Quantity).Include(o => o.Items).FirstOrDefault(o => o.Id == id);
+            var order = _context.Orders.Include(o => o.OrderItems).FirstOrDefault(o => o.Id == id);
             if (order != null)
             {
-                _context.Items.RemoveRange(order.Items);
                 _context.Orders.Remove(order);
                 _context.SaveChanges();
             }

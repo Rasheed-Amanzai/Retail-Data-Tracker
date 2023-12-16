@@ -33,22 +33,22 @@ namespace Retail_Data_Tracker.Controllers
             return RedirectToAction("Index", "Suppliers");
         }
 
-        [HttpPost]
-        public ActionResult Inventory(string CreateInvoice, Order order, Retail_Data_TrackerContext retailContext)
-        {
-            foreach(var item in retailContext.Items){
-                if (item.IsChecked){
-                    order.Items.Add(item);
-                } 
-            }
-            if (order.Items.IsNullOrEmpty())
-            {
-                return RedirectToAction("OrderForm", order);
-            }
-            else
-            {
-                return RedirectToAction("OrderForm", order);
-            }
-        }
+        //[HttpPost]
+        //public ActionResult Inventory(string CreateInvoice, Order order, Retail_Data_TrackerContext retailContext)
+        //{
+        //    foreach(var item in retailContext.Items){
+        //        if (item.IsChecked){
+        //            order.OrderItems.Add(item);
+        //        } 
+        //    }
+        //    if (order.Items.IsNullOrEmpty())
+        //    {
+        //        return RedirectToAction("OrderForm", order);
+        //    }
+        //    else
+        //    {
+        //        return RedirectToAction("OrderForm", order);
+        //    }
+        //}
     }
 }
