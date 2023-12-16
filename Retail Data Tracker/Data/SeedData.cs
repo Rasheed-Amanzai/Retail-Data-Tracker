@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿/// Written by Matthew-Nocera-Iozzo (GitHub: @afk-m) ///
+
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Retail_Data_Tracker.Controllers;
 using Retail_Data_Tracker.Models;

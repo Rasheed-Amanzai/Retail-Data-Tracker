@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+﻿/// Written by Matthew-Nocera-Iozzo (GitHub: @afk-m) ///
+
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Retail_Data_Tracker.Models
 {

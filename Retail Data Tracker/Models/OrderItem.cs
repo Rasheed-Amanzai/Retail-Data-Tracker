@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿/// Written by Matthew-Nocera-Iozzo (GitHub: @afk-m) ///
+
+using System.ComponentModel.DataAnnotations;
 
 namespace Retail_Data_Tracker.Models
 {

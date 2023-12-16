@@ -1,4 +1,6 @@
-﻿using System;
+﻿/// Written by Matthew-Nocera-Iozzo (GitHub: @afk-m) ///
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;

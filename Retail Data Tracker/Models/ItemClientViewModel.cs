@@ -1,4 +1,6 @@
-﻿namespace Retail_Data_Tracker.Models
+﻿/// Written by Matthew-Nocera-Iozzo (GitHub: @afk-m) ///
+
+namespace Retail_Data_Tracker.Models
 {
     public class ItemClientViewModel
     {
