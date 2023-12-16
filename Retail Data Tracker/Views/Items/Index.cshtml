@@ -52,11 +52,11 @@
                         @Html.HiddenFor(m => m.Items[i].Quantity)
             </td>
             <td>
-                        @Html.DisplayFor(m => m.Items[i].BuyCost)
+                        @(Model.Items[i].BuyCost.ToString("C2"))
                         @Html.HiddenFor(m => m.Items[i].BuyCost)
             </td>
             <td>
-                        @Html.DisplayFor(m => m.Items[i].SellCost)
+                        @(Model.Items[i].SellCost.ToString("C2"))
                         @Html.HiddenFor(m => m.Items[i].SellCost)
             </td>
             <td>
