@@ -23,17 +23,35 @@ namespace Retail_Data_Tracker.Controllers
             _context = context;
         }
 
+        public ItemClientViewModel generateModel()
+        {
+            var items = _context.Items.ToList();
+            var itemSuppliers = new List<Supplier>();
+
+            foreach (var item in items)
+            {
+                var supplier = _context.Suppliers.FirstOrDefault(s => s.Id == item.SupplierId);
+                itemSuppliers.Add(supplier);
+                Console.WriteLine(supplier.Name);
+            }
+
+            var viewModel = new ItemClientViewModel
+            {
+
+                Items = _context.Items.ToList(),
+                Clients = _context.Client.ToList(),
+                Suppliers = itemSuppliers
+            };
+
+            return viewModel;
+        }
+
         // GET: Items
         [HttpGet]
         public ActionResult Index()
         {
-            var viewModel = new ItemClientViewModel
-            {
-
-                Items = _context.Items.Include(i => i.ItemSupplier).ToList(),
-                Clients = _context.Client.ToList()
-            };
-        //var items = _context.Items.Include(i => i.ItemSupplier);
+            var viewModel = generateModel();
+            //var items = _context.Items.Include(i => i.ItemSupplier);
             return View(viewModel);
         }
 
@@ -73,8 +91,8 @@ namespace Retail_Data_Tracker.Controllers
 
                 if (checkedItems.Count == 0)
                 {
-                    var itemsL = _context.Items.Include(i => i.ItemSupplier);
-                    return View(itemsL.ToList());
+                    var lModel = generateModel();
+                    return View(lModel);
                 }
 
                 foreach (var item in checkedItems)
@@ -84,8 +102,8 @@ namespace Retail_Data_Tracker.Controllers
                     if (itemx.Quantity == 0)
                     {
                         ViewBag.Message = "Not enough items in stock";
-                        var itemsL = _context.Items.Include(i => i.ItemSupplier);
-                        return View(itemsL.ToList());
+                        var lModel = generateModel();
+                        return View(lModel);
                     }
                 }
 
@@ -139,11 +157,32 @@ namespace Retail_Data_Tracker.Controllers
             } else if (submitButton == "orderFromSupplier"){
                 //Console.WriteLine(submitButton);
                 //ViewBag.Message = "Invoice Created";
+
                 var checkedItems = items.Where(x => x.IsChecked).ToList();
+
+                if (checkedItems.Count > 1)
+                {
+                    for (var i = 1; i < checkedItems.Count; i++)
+                    {
+                        if (checkedItems[i].ItemSupplier != checkedItems[i - 1].ItemSupplier)
+                        {
+                            ViewBag.Message = "Supplier order can only be from one supplier.";
+                            var lModel = generateModel();
+                            return View(lModel);
+                        }
+                    }
+                }
+
                 List<Quantity> quantity = new List<Quantity>();
 
                 foreach (var item in checkedItems)
                 {
+                    if (item.QuantityWanted == 0)
+                    {
+                        ViewBag.Message = "Please enter a quantity";
+                        var itemsL = _context.Items.Include(i => i.ItemSupplier);
+                        return View(itemsL.ToList());
+                    }
                     Quantity q = new Quantity();
                     q.QuantityNumber = item.QuantityWanted;
                     Console.WriteLine(item.QuantityWanted);
@@ -152,8 +191,8 @@ namespace Retail_Data_Tracker.Controllers
 
                 if (checkedItems.Count == 0)
                 {
-                    var itemsL = _context.Items.Include(i => i.ItemSupplier);
-                    return View(itemsL.ToList());
+                    var lModel = generateModel();
+                    return View(lModel);
                 }
 
                 foreach (var item in checkedItems)
@@ -200,7 +239,7 @@ namespace Retail_Data_Tracker.Controllers
                     }
                 }
 
-                order.OrderClient = client;
+                order.OrderClient = new Client { Address = "1234 Me Street", Description = "You", Name = "Store Order" };
                 order.TrackingNumber = RandomString(8);
                 order.OrderDate = DateTime.Now;
                 order.ShippingDate = DateTime.Now.AddDays(1);
