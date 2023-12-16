@@ -20,7 +20,15 @@
                 <td>@item.Item.Name</td>
                 <td>@item.Item.ItemDesc</td>
                 <td>@item.Quantity</td>
-                <td>@((item.Item.SellCost * item.Quantity).ToString("C2"))</td>
+                <td>@if (Model.OrderType == OrderType.Retailer)
+                    {
+                        @((item.Item.SellCost * item.Quantity).ToString("C2"))
+                    }
+                    else if (Model.OrderType == OrderType.Supplier)
+                    {
+                        @((item.Item.BuyCost * item.Quantity).ToString("C2"))
+                    }
+                </td>
             </tr>
         }
     </tbody>
