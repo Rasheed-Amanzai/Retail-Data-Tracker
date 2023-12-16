@@ -12,8 +12,8 @@ namespace Retail_Data_Tracker.Models
     public class Order
     {
         public int Id { get; set; }
-        public List<Item> Items { get; set; } = new List<Item>();
-        public List<Quantity> Quantity {get; set;} = new List<Quantity>();
+        //public List<Item> Items { get; set; } = new List<Item>();
+        //public List<Quantity> Quantity {get; set;} = new List<Quantity>();
         public string TrackingNumber { get; set; }
         [Required(ErrorMessage = "Enter the issued date.")]
         [DataType(DataType.Date)]
@@ -25,16 +25,24 @@ namespace Retail_Data_Tracker.Models
         [DataType(DataType.Date)]
         public DateTime ArrivalDate { get; set; }
         public Client OrderClient { get; set; } = new Client();
-        public double OrderTotal 
+        public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
+
+        public double OrderTotal
         {
             get
             {
-                double OrderTotalNumber = 0;
-                for (int i = 0; i < Items.Count; i++)
+                double orderTotalNumber = 0;
+                if (OrderItems != null)
                 {
-                    OrderTotalNumber += (Items[i].SellCost * Quantity[i].QuantityNumber);
+                    foreach (var orderItem in OrderItems)
+                    {
+                        if (orderItem.Item != null)
+                        {
+                            orderTotalNumber += orderItem.Item.SellCost * orderItem.QuantityNumber;
+                        }
+                    }
                 }
-                return OrderTotalNumber;
+                return orderTotalNumber;
             }
         }
     }

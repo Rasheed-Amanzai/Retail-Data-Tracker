@@ -28,5 +28,7 @@ namespace Retail_Data_Tracker.Models
         {
             ItemSupplier = SupplierRepository.Suppliers.FirstOrDefault(s => s.Id == SupplierId);
         }
+
+        public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
     }
 }
