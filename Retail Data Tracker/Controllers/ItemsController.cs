@@ -79,18 +79,10 @@ namespace Retail_Data_Tracker.Controllers
                 //Console.WriteLine(submitButton);
                 //ViewBag.Message = "Invoice Created";
                 var checkedItems = items.Where(x => x.IsChecked).ToList();
-                List<Quantity> quantity = new List<Quantity>();
-
-                foreach (var item in checkedItems)
-                {
-                    Quantity q = new Quantity();
-                    q.QuantityNumber = item.QuantityWanted;
-                    Console.WriteLine(item.QuantityWanted);
-                    quantity.Add(q);
-                }
 
                 if (checkedItems.Count == 0)
                 {
+                    ViewBag.Message = "Please select an item to order";
                     var lModel = generateModel();
                     return View(lModel);
                 }
@@ -164,7 +156,9 @@ namespace Retail_Data_Tracker.Controllers
                 {
                     for (var i = 1; i < checkedItems.Count; i++)
                     {
-                        if (checkedItems[i].ItemSupplier != checkedItems[i - 1].ItemSupplier)
+                        Console.WriteLine(checkedItems[i].SupplierId);
+                        Console.WriteLine(checkedItems[i-1].SupplierId);
+                        if (checkedItems[i].SupplierId != checkedItems[i - 1].SupplierId)
                         {
                             ViewBag.Message = "Supplier order can only be from one supplier.";
                             var lModel = generateModel();
@@ -173,24 +167,9 @@ namespace Retail_Data_Tracker.Controllers
                     }
                 }
 
-                List<Quantity> quantity = new List<Quantity>();
-
-                foreach (var item in checkedItems)
-                {
-                    if (item.QuantityWanted == 0)
-                    {
-                        ViewBag.Message = "Please enter a quantity";
-                        var itemsL = _context.Items.Include(i => i.ItemSupplier);
-                        return View(itemsL.ToList());
-                    }
-                    Quantity q = new Quantity();
-                    q.QuantityNumber = item.QuantityWanted;
-                    Console.WriteLine(item.QuantityWanted);
-                    quantity.Add(q);
-                }
-
                 if (checkedItems.Count == 0)
                 {
+                    ViewBag.Message = "Please select an item.";
                     var lModel = generateModel();
                     return View(lModel);
                 }
@@ -201,9 +180,6 @@ namespace Retail_Data_Tracker.Controllers
                     var itemx = await _context.Items.FindAsync(item.Id);
                     if (itemx.Quantity == 0)
                     {
-                        ViewBag.Message = "Not enough items in stock";
-                        var itemsL = _context.Items.Include(i => i.ItemSupplier);
-                        return View(itemsL.ToList());
                     }
                 }
 
@@ -239,7 +215,7 @@ namespace Retail_Data_Tracker.Controllers
                     }
                 }
 
-                order.OrderClient = new Client { Address = "1234 Me Street", Description = "You", Name = "Store Order" };
+                order.OrderClient = _context.Client.FirstOrDefault(x => x.Name == "You");
                 order.TrackingNumber = RandomString(8);
                 order.OrderDate = DateTime.Now;
                 order.ShippingDate = DateTime.Now.AddDays(1);
@@ -256,14 +232,8 @@ namespace Retail_Data_Tracker.Controllers
                 return RedirectToAction("Index", "Orders");
             }
 
-            var viewModel = new ItemClientViewModel
-            {
-
-                Items = _context.Items.Include(i => i.ItemSupplier).ToList(),
-                Clients = _context.Client.ToList()
-            };
-            //var items = _context.Items.Include(i => i.ItemSupplier);
-            return View(viewModel);
+            var lmodel = generateModel();
+            return View(lmodel);
         }
         
         // GET: Items/Details/5
@@ -286,27 +256,36 @@ namespace Retail_Data_Tracker.Controllers
         }
 
         // GET: Items/Create
+        [HttpGet("create")]
         public IActionResult Create()
         {
-            ViewData["SupplierId"] = new SelectList(_context.Set<Supplier>(), "Id", "Id");
-            return View();
+            var viewModel = new ItemCreateViewModel
+            {
+                Suppliers = _context.Suppliers.ToList()
+            };
+            return View(viewModel);
         }
 
         // POST: Items/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        [HttpPost("create")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,ItemDesc,Quantity,SupplierId,BuyCost,SellCost,IsChecked")] Item item)
+        public async Task<IActionResult> Create(Item item)
         {
-            if (ModelState.IsValid)
-            {
+            Console.WriteLine(item.Name);
+            Console.WriteLine(item.SupplierId);
+            
+                Console.WriteLine(item.BuyCost);
+                item.QuantityWanted = 0;
+                item.IsChecked = false;
+                var supplier = _context.Suppliers.FirstOrDefault(s => s.Id == item.SupplierId);
+                item.ItemSupplier = supplier;
+
                 _context.Add(item);
                 await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
-            }
-            ViewData["SupplierId"] = new SelectList(_context.Set<Supplier>(), "Id", "Id", item.SupplierId);
-            return View(item);
         }
 
         // GET: Items/Edit/5
