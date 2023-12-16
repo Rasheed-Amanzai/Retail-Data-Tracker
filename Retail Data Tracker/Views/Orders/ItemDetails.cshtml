@@ -2,7 +2,7 @@
 
 <h2>Order Details</h2>
 
-<h3>Order Total: @Model.OrderTotal</h3>
+<h3>Order Total: $@Model.OrderTotal.ToString("0.00")</h3>
 
 <table class="table">
     <thead>
@@ -14,13 +14,13 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var itemQuantity in Model.ItemQuantities)
+        @foreach (var item in Model.ItemQuantities)
         {
             <tr>
-                <td>@itemQuantity.Item.Name</td>
-                <td>@itemQuantity.Item.ItemDesc</td>
-                <td>@itemQuantity.Quantity</td>
-                <td>@itemQuantity.Item.SellCost * @itemQuantity.Quantity</td>
+                <td>@item.Item.Name</td>
+                <td>@item.Item.ItemDesc</td>
+                <td>@item.Quantity</td>
+                <td>@((item.Item.SellCost * item.Quantity).ToString("C2"))</td>
             </tr>
         }
     </tbody>

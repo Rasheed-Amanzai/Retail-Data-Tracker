@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Retail_Data_Tracker.Models.Order>
+﻿@model List<Retail_Data_Tracker.Models.Order>
 
 @{
     ViewData["Title"] = "Index";
@@ -9,6 +9,7 @@
 @* <p>
     <a asp-action="Create">Create New</a>
 </p> *@
+
 <table class="table">
     <thead>
         <tr>
@@ -19,57 +20,57 @@
                 Client Name
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.TrackingNumber)
+                Tracking Number
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.OrderDate)
+                Order Date
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Items)
+                Items
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.OrderTotal)
+                Order Total
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ShippingDate)
+                Shipping Date
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ArrivalDate)
+                Arrival Date
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+        @for (int i = 0; i < Model.Count; i++){
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Id)
+                @Html.DisplayFor(m => m[i].Id)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.OrderClient.Name)
+                    @Html.DisplayFor(m => m[i].OrderClient.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.TrackingNumber)
+                    @Html.DisplayFor(m => m[i].TrackingNumber)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.OrderDate)
+                    @Html.DisplayFor(m => m[i].OrderDate)
             </td>
             <td>
-                <a asp-action="ItemDetails" asp-route-id="@item.Id">View</a>
+                <a asp-action="ItemDetails" asp-route-id="@Model[i].Id">View</a>
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.OrderTotal)
+                    @(Model[i].OrderTotal.ToString("C2"))
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ShippingDate)
+                    @Html.DisplayFor(m => m[i].ShippingDate)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ArrivalDate)
+                    @Html.DisplayFor(m => m[i].ArrivalDate)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@Model[i].Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@Model[i].Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@Model[i].Id">Delete</a>
             </td>
         </tr>
 }

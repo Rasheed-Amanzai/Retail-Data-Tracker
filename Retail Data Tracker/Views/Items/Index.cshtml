@@ -11,6 +11,7 @@
 </p>
 @using (Html.BeginForm("Index", "Items", FormMethod.Post))
 {
+    @Html.AntiForgeryToken()
 <table class="table">
     <thead>
         <tr>
@@ -72,14 +73,15 @@
                         @Html.HiddenFor(m => m.Items[i].Id)
                 </td>
                 <td>
-                        @Html.TextBox("QuantityWanted", 1, new { type = "number", min = 1, max = Model.Items[i].Quantity, name = $"Model[{i}].QuantityWanted" })
+                        @Html.TextBox($"Items[{i}].QuantityWanted", 1, new { type = "number", min = 1, max = Model.Items[i].Quantity })
+                        @Html.HiddenFor(m => m.Items[i].QuantityWanted)
                 </td>
         </tr>
 }
     </tbody>
 </table>
 <br />
-@Html.DropDownListFor(m => m.SelectedClientId, new SelectList(Model.Clients, "Id", "Name"), "Select a client")
+@Html.DropDownListFor(m => m.SelectedClientId, new SelectList(Model.Clients, "Id", "Name"))
     @Html.HiddenFor(model => model.SelectedClientId, new { id = "hiddenDropdownValue" })
     <button class="btn btn-primary" name="submitButton" value="invoiceSubmit">Create invoice</button>
     <button type="submit" class="btn btn-danger" name="submitButton" value="orderFromSupplier">Order from supplier</button>
